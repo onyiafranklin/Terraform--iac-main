@@ -102,9 +102,9 @@ resource "aws_nat_gateway" "NatGateway2" {
   }
 }
 
-/*=========================ROUTE TABLE ======================*/
+/*=========================Public ROUTE TABLE ======================*/
 resource "aws_route_table" "PublicRouteTable" {
-    vpc_id = aws_vpc.VPC.id
+    vpc_id = aws_vpc.vpc.id
 
     tags = {
       "Name" = "${var.env_name}-pub-rt"
@@ -114,7 +114,7 @@ resource "aws_route_table" "PublicRouteTable" {
 resource "aws_route" "DefaultPublicRoute" {
     route_table_id         = aws_route_table.PublicRouteTable.id
     destination_cidr_block = "0.0.0.0/0"
-    gateway_id             = aws_internet_gateway.InternetGateway.id
+    gateway_id             = aws_internet_gateway.Internet-Gateway.id
 }
 
 resource "aws_route_table_association" "PublicSubnet1RouteTableAssociation" {
@@ -127,8 +127,10 @@ resource "aws_route_table_association" "PublicSubnet2RouteTableAssociation" {
     subnet_id      = aws_subnet.PublicSubnet2.id
 }
 
+
+/*=========================Private ROUTE TABLE ======================*/
 resource "aws_route_table" "PrivateRouteTable1" {
-    vpc_id = aws_vpc.VPC.id
+    vpc_id = aws_vpc.vpc.id
 
     tags = {
       "Name" = "${var.env_name}-prv-rt1"
@@ -147,7 +149,7 @@ resource "aws_route_table_association" "PrivateSubnet1RouteTableAssociation" {
 }
 
 resource "aws_route_table" "PrivateRouteTable2" {
-    vpc_id = aws_vpc.VPC.id
+    vpc_id = aws_vpc.vpc.id
 
     tags = {
       "Name" = "${var.env_name}-prv-rt2"
